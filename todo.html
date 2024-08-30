@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle, #000000, #434343);
+            /* Radial gradient effect from black to dark gray */
+            background-attachment: fixed;
+            /* Keeps the background fixed while scrolling */
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: rgba(28, 28, 28, 0.9); /* Darker background color for the container */
+            padding: 30px;
+            border-radius: 15px; /* Rounded corners for the container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Adds shadow for a 3D effect */
+            text-align: center; /* Center align text */
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .task-input {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .task-input input {
+            padding: 10px;
+            border-radius: 5px 0 0 5px;
+            border: 2px solid #1C1C1C;
+            border-right: none;
+            flex: 1;
+            background: #2e2e2e;
+            color: #ffffff;
+        }
+        .task-input button {
+            padding: 10px;
+            border: 2px solid #1C1C1C;
+            border-radius: 0 5px 5px 0;
+            background: #3C3C3C;
+            color: #ffffff;
+            cursor: pointer;
+            border-left: none;
+            transition: background-color 0.3s ease;
+        }
+        .task-input button:hover {
+            background-color: #4c4c4c;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        li {
+            background: #2e2e2e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        li:hover {
+            background-color: #3c3c3c;
+            transform: translateY(-3px);
+        }
+        li.completed {
+            background: #2ecc71; /* Green background for completed tasks */
+            text-decoration: line-through;
+            color: #ffffff; /* White text for better contrast */
+        }
+        .delete-button,
+        .complete-button {
+            background: #e74c3c;
+            color: #ffffff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
+        }
+        .delete-button:hover,
+        .complete-button:hover {
+            background-color: #c0392b;
+        }
+        .complete-button {
+            background: #2ecc71;
+        }
+        .complete-button:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="task-input">
+            <input type="text" id="task" placeholder="Add a new task...">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <ul id="taskList">
+            <!-- Tasks will be added here -->
+        </ul>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('task');
+            const taskValue = taskInput.value.trim();
+            if (taskValue) {
+                const taskList = document.getElementById('taskList');
+                
+                const taskItem = document.createElement('li');
+                taskItem.innerHTML = `
+                    ${taskValue}
+                    <div>
+                        <button class="complete-button" onclick="completeTask(this)">Complete</button>
+                        <button class="delete-button" onclick="deleteTask(this)">Delete</button>
+                    </div>
+                `;
+                taskList.appendChild(taskItem);
+                taskInput.value = ''; // Clear input field
+            }
+        }
+
+        function deleteTask(button) {
+            const taskItem = button.parentElement.parentElement;
+            taskItem.remove();
+        }
+
+        function completeTask(button) {
+            const taskItem = button.parentElement.parentElement;
+            taskItem.classList.toggle('completed');
+        }
+    </script>
+</body>
+</html>
