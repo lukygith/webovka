@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page with Buttons</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle, #000000, #434343);
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            background-color: rgba(28, 28, 28, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .button-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .button {
+            padding: 15px 30px;
+            border-radius: 10px;
+            background-color: #2E2E2E;
+            border: 2px solid #1C1C1C;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #3C3C3C;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+        }
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1C1C1C;
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            font-size: 1.2em;
+            z-index: 1000;
+            border: 1px solid #434343;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="button-container">
+            <!-- First button with direct onclick function to open tajemstvi.html -->
+            <div class="button" onclick="window.location.href = 'tajemstvi.html';">Tajemství</div>
+            <div class="button" onclick="window.location.href = 'todo.html';">To do</div>
+            <div class="button" onclick="showNotification()">Button 3</div>
+            <div class="button" onclick="showNotification()">Button 4</div>
+            <div class="button" onclick="showNotification()">Button 5</div>
+            <div class="button" onclick="showNotification()">Button 6</div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">Zatím zde nic není.</div>
+
+    <script>
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
