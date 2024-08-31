@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vlastní šifrovací systém</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle, #000000, #434343);
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            background-color: rgba(28, 28, 28, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+        textarea {
+            width: calc(100% - 20px); /* Adjusting for padding */
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 2px solid #1C1C1C;
+            border-radius: 5px;
+            background-color: #2E2E2E;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            color: #FFFFFF;
+            background-color: #2E2E2E;
+            border: 2px solid #1C1C1C;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        button:hover {
+            background-color: #3C3C3C;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+        }
+        .large-button {
+            padding: 15px;
+            font-size: 18px;
+        }
+        .extra-large-button {
+            padding: 20px;
+            font-size: 20px;
+        }
+        .radio-group {
+            margin: 20px 0;
+            color: #FFFFFF;
+        }
+        .radio-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1C1C1C;
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            font-size: 1.2em;
+            z-index: 1000;
+            border: 1px solid #434343;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Vlastní šifrovací systém</h1>
+        <div class="radio-group">
+            <label><input type="radio" name="conversion" value="encrypt" checked onchange="clearText()"> Šifrovat</label>
+            <label><input type="radio" name="conversion" value="decrypt" onchange="clearText()"> Dešifrovat</label>
+        </div>
+        <textarea id="inputArea" placeholder="Zadejte text..."></textarea>
+        <textarea id="outputArea" placeholder="Výstup..." readonly></textarea>
+        <div class="button-container">
+            <button onclick="copyToClipboard()" class="large-button">Zkopírovat</button>
+            <button onclick="clearAll()" class="large-button">Vymazat</button>
+            <button onclick="processText()" class="extra-large-button">Generovat</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">Zpracování dokončeno!</div>
+
+    <script>
+        const substitutionCipher = {
+            'A': 'M', 'B': 'N', 'C': 'O', 'D': 'P', 'E': 'Q', 'F': 'R', 'G': 'S', 'H': 'T', 'I': 'U', 'J': 'V',
+            'K': 'W', 'L': 'X', 'M': 'Y', 'N': 'Z', 'O': 'A', 'P': 'B', 'Q': 'C', 'R': 'D', 'S': 'E', 'T': 'F',
+            'U': 'G', 'V': 'H', 'W': 'I', 'X': 'J', 'Y': 'K', 'Z': 'L', ' ': ' '
+        };
+
+        const reverseCipher = Object.fromEntries(Object.entries(substitutionCipher).map(([k, v]) => [v, k]));
+
+        function processText() {
+            const input = document.getElementById('inputArea').value.toUpperCase();
+            const conversionType = document.querySelector('input[name="conversion"]:checked').value;
+
+            if (input.trim() === '') {
+                showNotification('Není zadaný žádný text.');
+                return;
+            }
+
+            let result;
+            if (conversionType === 'encrypt') {
+                result = input.split('').map(char => substitutionCipher[char] || char).join('');
+            } else if (conversionType === 'decrypt') {
+                result = input.split('').map(char => reverseCipher[char] || char).join('');
+            }
+
+            document.getElementById('outputArea').value = result;
+            showNotification('Zpracování dokončeno!');
+        }
+
+        function copyToClipboard() {
+            const outputArea = document.getElementById('outputArea');
+            if (outputArea.value.trim() === '') {
+                showNotification('Není co kopírovat.');
+                return;
+            }
+
+            outputArea.select();
+            document.execCommand('copy');
+            showNotification('Text byl zkopírován!');
+        }
+
+        function clearText() {
+            document.getElementById('inputArea').value = '';
+            document.getElementById('outputArea').value = '';
+        }
+
+        function clearAll() {
+            clearText();
+            document.querySelector('input[name="conversion"][value="encrypt"]').checked = true;
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000); // Zobrazí notifikaci na 3 sekundy
+        }
+    </script>
+</body>
+</html>
