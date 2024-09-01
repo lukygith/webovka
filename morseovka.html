@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morseův kód překladač</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle, #000000, #434343);
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            background-color: rgba(28, 28, 28, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+        textarea {
+            width: calc(100% - 20px);
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 2px solid #1C1C1C;
+            border-radius: 5px;
+            background-color: #2E2E2E;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            color: #FFFFFF;
+            background-color: #2E2E2E;
+            border: 2px solid #1C1C1C;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        button:hover {
+            background-color: #3C3C3C;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+        }
+        .large-button {
+            padding: 15px;
+            font-size: 18px;
+        }
+        .extra-large-button {
+            padding: 20px;
+            font-size: 20px;
+        }
+        .radio-group {
+            margin: 20px 0;
+            color: #FFFFFF;
+        }
+        .radio-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1C1C1C;
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            font-size: 1.2em;
+            z-index: 1000;
+            border: 1px solid #434343;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Morseův kód překladač</h1>
+        <div class="radio-group">
+            <label><input type="radio" name="conversion" value="textToMorse" checked onchange="clearText()"> Text na Morse</label>
+            <label><input type="radio" name="conversion" value="morseToText" onchange="clearText()"> Morse na Text</label>
+        </div>
+        <textarea id="inputArea" placeholder="Zadejte text nebo Morseův kód..."></textarea>
+        <textarea id="outputArea" placeholder="Výstup..." readonly></textarea>
+        <div class="button-container">
+            <button onclick="copyToClipboard()" class="large-button">Zkopírovat</button>
+            <button onclick="clearAll()" class="large-button">Vymazat</button>
+            <button onclick="processText()" class="extra-large-button">Generovat</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">Zpracování dokončeno!</div>
+
+    <script>
+        const morseCode = {
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+            'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---',
+            '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
+            '8': '---..', '9': '----.', ' ': '/', '.': '.-.-.-', ',': '--..--',
+            '?': '..--..', '!': '-.-.--', '-': '-....-', '/': '-..-.', '@': '.--.-.',
+            '&': '.-...'
+        };
+
+        const reverseMorseCode = Object.fromEntries(Object.entries(morseCode).map(([k, v]) => [v, k]));
+
+        function processText() {
+            const input = document.getElementById('inputArea').value.trim();
+            const conversionType = document.querySelector('input[name="conversion"]:checked').value;
+
+            if (input === '') {
+                showNotification('Není zadaný žádný text.');
+                return;
+            }
+
+            let result = '';
+            if (conversionType === 'textToMorse') {
+                result = input.toUpperCase().split('').map(char => morseCode[char] || '').join(' ');
+            } else if (conversionType === 'morseToText') {
+                result = input.split(' ').map(code => reverseMorseCode[code] || '').join('');
+            }
+
+            document.getElementById('outputArea').value = result;
+            showNotification('Zpracování dokončeno!');
+        }
+
+        function copyToClipboard() {
+            const outputArea = document.getElementById('outputArea');
+            if (outputArea.value.trim() === '') {
+                showNotification('Není co kopírovat.');
+                return;
+            }
+
+            outputArea.select();
+            document.execCommand('copy');
+            showNotification('Text byl zkopírován!');
+        }
+
+        function clearText() {
+            document.getElementById('inputArea').value = '';
+            document.getElementById('outputArea').value = '';
+        }
+
+        function clearAll() {
+            clearText();
+            document.querySelector('input[name="conversion"][value="textToMorse"]').checked = true;
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
