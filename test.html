@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stažení souboru</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .download-btn {
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tlačítko pro spuštění stahování -->
+    <button class="download-btn" onclick="downloadFile()">Stáhnout test.png</button>
+
+    <script>
+        function downloadFile() {
+            // Vytvoříme nový element <a>
+            const link = document.createElement('a');
+            // Nastavíme odkaz na soubor, který chceme stáhnout
+            link.href = 'test.png';
+            // Nastavíme název souboru při stažení
+            link.download = 'test.png';
+            // Programově spustíme kliknutí na tento odkaz
+            link.click();
+        }
+    </script>
+
+</body>
+</html>
