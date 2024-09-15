@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stažení souboru</title>
+    <title>Lukáš Tools</title>
     <style>
         body {
             display: flex;
@@ -14,6 +14,7 @@
             margin: 0;
             background: radial-gradient(circle, #000000, #434343);
             background-attachment: fixed; /* Keeps the background fixed while scrolling */
+            font-family: 'Times New Roman', serif; /* Aplikace klasického serifového fontu */
         }
 
         /* Styl kontejneru za tlačítkem */
@@ -23,6 +24,30 @@
             border-radius: 15px; /* Rounded corners for the container */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Adds shadow for a 3D effect */
             text-align: center; /* Center align text */
+            max-width: 500px; /* Limiting the container width */
+        }
+
+        /* Styl textového pole */
+        .description {
+            font-size: 20px;
+            color: white;
+            margin-bottom: 20px; /* Spacing between text and button */
+        }
+
+        /* Styl textového pole pro dlouhý text */
+        .long-text {
+            width: 100%;
+            height: auto; /* Adjust height based on content */
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: transparent; /* No background color */
+            border: none; /* No border */
+            border-radius: 0; /* No rounded corners */
+            text-align: center; /* Center align text within the div */
+            line-height: 1.5; /* Improve readability */
+            box-shadow: none; /* Remove shadow */
         }
 
         /* Styl tlačítka pro stažení */
@@ -37,6 +62,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
             font-weight: bold;
+            margin-top: 20px; /* Spacing between text area and button */
         }
 
         .download-button:hover {
@@ -48,6 +74,12 @@
 <body>
 
     <div class="container">
+        <!-- Textové pole -->
+        <div class="description">Lukas Tools DOWNLOAD</div>
+        
+        <!-- Textové pole pro dlouhý text -->
+        <div class="long-text">Zde si můžete stáhnout Lukas Tools Software</div>
+        
         <!-- Tlačítko pro spuštění stahování -->
         <button class="download-button" onclick="downloadFile()">Stáhnout Soubor</button>
     </div>
@@ -57,9 +89,9 @@
             // Vytvoříme nový element <a>
             const link = document.createElement('a');
             // Nastavíme odkaz na soubor, který chceme stáhnout
-            link.href = 'test.png';
+            link.href = 'LukasTools.rar';
             // Nastavíme název souboru při stažení
-            link.download = 'test.png';
+            link.download = 'LukasTools.rar';
             // Programově spustíme kliknutí na tento odkaz
             link.click();
         }
