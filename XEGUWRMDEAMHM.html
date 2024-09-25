@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background with Text and Larger Styled Border</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle, #000000, #434343);
+            background-attachment: fixed; /* Keeps the background fixed while scrolling */
+            font-family: 'Times New Roman', serif;
+            color: white;
+            text-align: center; /* Text bude zarovnaný na střed */
+        }
+
+        /* Styl kontejneru s větším rámečkem */
+        .container {
+            background-color: #1C1C1C; /* Stejná tmavší barva pozadí jako v původním kódu */
+            padding: 40px; /* Větší vnitřní odsazení */
+            border-radius: 15px; /* Stejné zaoblené rohy */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.8); /* Zvýšený stín pro 3D efekt */
+            max-width: 800px; /* Zvýšená maximální šířka kontejneru */
+            margin: 20px;
+        }
+
+        /* Styl textového bloku */
+        .text-block {
+            font-size: 20px;
+            line-height: 1.5; /* Pro lepší čitelnost meziřádková mezera */
+            margin-bottom: 20px; /* Mezera mezi textovými bloky */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Kontejner s větším rámečkem -->
+    <div class="container">
+        <!-- První textový blok -->
+        <div class="text-block">
+            Sice jsi něco našel, ale nejsi zde správně!
+        </div>
+        
+        <!-- Druhý textový blok -->
+        <div class="text-block">
+            Ale jedná se o šifru!
+        </div>
+
+        <!-- Další textový blok -->
+        <div class="text-block">
+            XEGUWRMDEAMHM.html
+        </div>
+    </div>
+
+</body>
+</html>
