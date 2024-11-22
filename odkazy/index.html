@@ -3,27 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Přesměrování</title>
+    <title>Přesměrování na hlavní stránku</title>
     <script>
-        const path = window.location.pathname; // Získá aktuální cestu
-        const redirects = {
-            "/odkazy/tiktok": "https://www.tiktok.com/",
-            "/odkazy/instagram": "https://www.instagram.com/"
-        };
-
-        if (redirects[path]) {
-            // Přesměruje na cílovou URL
-            window.location.href = redirects[path];
-        } else {
-            // Zobrazí chybu, pokud cesta není platná
-            document.body.innerHTML = `
-                <h1>404 - Stránka nenalezena</h1>
-                <p>Neplatný odkaz. Zkuste <a href="/odkazy/tiktok">TikTok</a> nebo <a href="/odkazy/instagram">Instagram</a>.</p>
-            `;
-        }
+        // Automatické přesměrování na hlavní stránku
+        window.location.href = "https://lukashasak.fun"; // Změňte na hlavní URL vašeho webu
     </script>
 </head>
 <body>
-    <p>Přesměrování probíhá...</p>
+    <p>., <a href="https://lukashasak.fun">klikněte zde</a>.</p>
 </body>
 </html>
