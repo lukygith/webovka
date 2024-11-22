@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Přesměrování</title>
+    <script>
+        // Získání cesty z URL (např. "/odkazy/tiktok")
+        const path = window.location.pathname;
+
+        // Definice přesměrování
+        const redirects = {
+            "/odkazy/tiktok": "https://www.tiktok.com/",
+            "/odkazy/instagram": "https://www.instagram.com/",
+        };
+
+        // Pokud cesta odpovídá, přesměruj
+        if (redirects[path]) {
+            window.location.href = redirects[path];
+        } else {
+            // Pokud není specifikovaný odkaz, vrať chybu nebo domovskou stránku
+            document.body.innerHTML = "<h1>Neplatný odkaz!</h1><p>Vyberte platnou adresu, například <a href='/odkazy/tiktok'>TikTok</a> nebo <a href='/odkazy/instagram'>Instagram</a>.</p>";
+        }
+    </script>
+</head>
+<body>
+    <p>Přesměrování probíhá...</p>
+</body>
+</html>
