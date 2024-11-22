@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Přesměrování</title>
+    <script>
+        const path = window.location.pathname;
+
+        const redirects = {
+            "/odkazy/tiktok": "https://www.tiktok.com/",
+        };
+
+        if (redirects[path]) {
+            window.location.href = redirects[path];
+        } else {
+            document.body.innerHTML = "<h1>Neplatný odkaz!</h1>";
+        }
+    </script>
+</head>
+<body>
+    <p>Přesměrování probíhá...</p>
+</body>
+</html>
