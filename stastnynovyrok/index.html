@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Přání do nového roka 2025!</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        #canvas {
+            display: block;
+        }
+
+        #year {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 100px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .changeYear {
+            animation: changeNumberAnim 2s forwards;
+        }
+
+        @keyframes changeNumberAnim {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            30% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+            50% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+            }
+            70% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        #countdown {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            font-size: 40px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        #happyNewYear {
+            position: absolute;
+            top: 70%; /* Posunuto níže pro lepší vzhled na mobilu */
+            left: 50%;
+            font-size: 60px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            transform: translateX(-50%) translateY(-50%);
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s 1s forwards;
+        }
+
+        /* Media query pro mobilní zařízení */
+        @media (max-width: 768px) {
+            #happyNewYear {
+                top: 80%; /* Ještě více posunuto dolů pro mobilní zařízení */
+                font-size: 40px; /* Zmenšení písma na menších obrazovkách */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div id="year">2024</div>
+<div id="countdown"></div>
+<div id="happyNewYear">Šťastný nový rok 2025!</div>
+
+<script>
+    window.addEventListener("resize", resizeCanvas, false);
+    window.addEventListener("DOMContentLoaded", onLoad, false);
+
+    window.requestAnimationFrame = 
+        window.requestAnimationFrame || 
+        window.webkitRequestAnimationFrame || 
+        window.mozRequestAnimationFrame    || 
+        window.oRequestAnimationFrame      || 
+        window.msRequestAnimationFrame     || 
+        function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+
+    var canvas, ctx, w, h, particles = [], probability = 0.04,
+        xPoint, yPoint;
+
+    var countdownInterval;
+    var targetDate = new Date();
+    targetDate.setHours(24, 0, 0, 0); // Nastavíme půlnoc dnešního dne
+    var fireworkActive = true; // Určuje, zda je ohňostroj aktivní
+
+    function onLoad() {
+        canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
+        resizeCanvas();
+
+        window.requestAnimationFrame(updateWorld);
+
+        countdownInterval = setInterval(updateCountdown, 1000); // Interval pro aktualizaci odpočtu
+    } 
+
+    function resizeCanvas() {
+        if (!!canvas) {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+    } 
+
+    function updateWorld() {
+        update();
+        paint();
+        window.requestAnimationFrame(updateWorld);
+    } 
+
+    function update() {
+        if (particles.length < 500 && Math.random() < probability && fireworkActive) {
+            createFirework();
+        }
+        var alive = [];
+        for (var i = 0; i < particles.length; i++) {
+            if (particles[i].move()) {
+                alive.push(particles[i]);
+            }
+        }
+        particles = alive;
+    } 
+
+    function paint() {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = "rgba(0,0,0,0.2)";
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalCompositeOperation = 'lighter';
+        for (var i = 0; i < particles.length; i++) {
+            particles[i].draw(ctx);
+        }
+    } 
+
+    function createFirework() {
+        xPoint = Math.random() * (w - 200) + 100;
+        yPoint = Math.random() * (h - 200) + 100;
+        var nFire = 50;  // Počet paprsků (pro hvězdný efekt)
+        var c = "rgb(" + (~~(Math.random() * 200 + 55)) + "," 
+                       + (~~(Math.random() * 200 + 55)) + "," 
+                       + (~~(Math.random() * 200 + 55)) + ")";
+
+        // Generování paprsků pro hvězdný efekt
+        for (var i = 0; i < nFire; i++) {
+            var particle = new Particle();
+            particle.color = c;
+            
+            var angle = (i * 360 / nFire);  // Rovnoměrné rozložení úhlů (pro hvězdici)
+            var speed = Math.random() * 3 + 5; // Náhodná rychlost
+
+            // Rychlosti na základě úhlu
+            particle.vx = speed * Math.cos(angle * Math.PI / 180);
+            particle.vy = speed * Math.sin(angle * Math.PI / 180);
+
+            particles.push(particle);
+        }
+    } 
+
+    function Particle() {
+        this.w = this.h = Math.random() * 4 + 1;
+        
+        this.x = xPoint - this.w / 2;
+        this.y = yPoint - this.h / 2;
+        
+        this.vx = (Math.random() - 0.5) * 10;
+        this.vy = (Math.random() - 0.5) * 10;
+        
+        this.alpha = Math.random() * .5 + .5;
+        
+        this.color;
+    } 
+
+    Particle.prototype = {
+        gravity: 0.05,
+        move: function () {
+            this.x += this.vx;
+            this.vy += this.gravity;
+            this.y += this.vy;
+            this.alpha -= 0.01;
+            if (this.x <= -this.w || this.x >= w ||
+                this.y >= h ||
+                this.alpha <= 0) {
+                    return false;
+            }
+            return true;
+        },
+        draw: function (c) {
+            c.save();
+            c.beginPath();
+
+            c.translate(this.x + this.w / 2, this.y + this.h / 2);
+            c.arc(0, 0, this.w, 0, Math.PI * 2);
+            c.fillStyle = this.color;
+            c.globalAlpha = this.alpha;
+
+            c.closePath();
+            c.fill();
+            c.restore();
+        }
+    } 
+
+    // Funkce pro změnu roku s mega efektem
+    function changeYear() {
+        var yearElement = document.getElementById("year");
+        yearElement.classList.add("changeYear");
+        yearElement.innerText = "2025";
+
+        // Spustí ohňostroj po změně roku
+        setTimeout(createFirework, 500); 
+        setTimeout(createFirework, 1000); 
+        setTimeout(createFirework, 1500);
+        setTimeout(createFirework, 2000);
+    }
+
+    // Funkce pro aktualizaci odpočtu
+    function updateCountdown() {
+        var now = new Date();
+        var remainingTime = targetDate - now;
+
+        // Vypnutí ohňostroje minutu před půlnocí
+        if (remainingTime <= 60000 && fireworkActive) {
+            fireworkActive = false; // Vypne ohňostroj
+        }
+
+        // Obnovení ohňostroje po půlnoci
+        if (remainingTime <= 0) {
+            clearInterval(countdownInterval);
+            changeYear(); // Změní rok a spustí ohňostroj
+            fireworkActive = true; // Aktivuje ohňostroj
+        }
+
+        var hours = Math.floor(remainingTime / (1000 * 60 * 60)) % 24;
+        var minutes = Math.floor(remainingTime / (1000 * 60)) % 60;
+        var seconds = Math.floor(remainingTime / 1000) % 60;
+
+        // Zobrazení odpočtu
+        document.getElementById("countdown").innerText =
+            (hours < 10 ? '0' + hours : hours) + ':' +
+            (minutes < 10 ? '0' + minutes : minutes) + ':' +
+            (seconds < 10 ? '0' + seconds : seconds);
+    }
+</script>
+
+</body>
+</html>
