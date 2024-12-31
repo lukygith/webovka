@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Přání do nového roka 2025!</title>
+    <title>Přání do nového roka</title>
     <style>
         body {
             margin: 0;
@@ -66,17 +66,6 @@
             }
         }
 
-        #countdown {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            font-size: 40px;
-            color: white;
-            font-family: 'Arial', sans-serif;
-            transform: translateX(-50%);
-            text-align: center;
-        }
-
         #happyNewYear {
             position: absolute;
             top: 70%; /* Posunuto níže pro lepší vzhled na mobilu */
@@ -103,9 +92,8 @@
 
 <canvas id="canvas"></canvas>
 
-<div id="year">2024</div>
-<div id="countdown"></div>
-<div id="happyNewYear">Šťastný nový rok 2025!</div>
+<div id="year">2025</div> <!-- Změněno na 2025 -->
+<div id="happyNewYear">Šťastný nový rok!</div>
 
 <script>
     window.addEventListener("resize", resizeCanvas, false);
@@ -124,9 +112,6 @@
     var canvas, ctx, w, h, particles = [], probability = 0.04,
         xPoint, yPoint;
 
-    var countdownInterval;
-    var targetDate = new Date();
-    targetDate.setHours(24, 0, 0, 0); // Nastavíme půlnoc dnešního dne
     var fireworkActive = true; // Určuje, zda je ohňostroj aktivní
 
     function onLoad() {
@@ -135,8 +120,6 @@
         resizeCanvas();
 
         window.requestAnimationFrame(updateWorld);
-
-        countdownInterval = setInterval(updateCountdown, 1000); // Interval pro aktualizaci odpočtu
     } 
 
     function resizeCanvas() {
@@ -253,34 +236,6 @@
         setTimeout(createFirework, 1000); 
         setTimeout(createFirework, 1500);
         setTimeout(createFirework, 2000);
-    }
-
-    // Funkce pro aktualizaci odpočtu
-    function updateCountdown() {
-        var now = new Date();
-        var remainingTime = targetDate - now;
-
-        // Vypnutí ohňostroje minutu před půlnocí
-        if (remainingTime <= 60000 && fireworkActive) {
-            fireworkActive = false; // Vypne ohňostroj
-        }
-
-        // Obnovení ohňostroje po půlnoci
-        if (remainingTime <= 0) {
-            clearInterval(countdownInterval);
-            changeYear(); // Změní rok a spustí ohňostroj
-            fireworkActive = true; // Aktivuje ohňostroj
-        }
-
-        var hours = Math.floor(remainingTime / (1000 * 60 * 60)) % 24;
-        var minutes = Math.floor(remainingTime / (1000 * 60)) % 60;
-        var seconds = Math.floor(remainingTime / 1000) % 60;
-
-        // Zobrazení odpočtu
-        document.getElementById("countdown").innerText =
-            (hours < 10 ? '0' + hours : hours) + ':' +
-            (minutes < 10 ? '0' + minutes : minutes) + ':' +
-            (seconds < 10 ? '0' + seconds : seconds);
     }
 </script>
 
