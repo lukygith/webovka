@@ -68,7 +68,7 @@
 
         #happyNewYear {
             position: absolute;
-            top: 70%; /* Posunuto níže pro lepší vzhled na mobilu */
+            top: 70%;
             left: 50%;
             font-size: 60px;
             color: white;
@@ -86,14 +86,36 @@
                 font-size: 40px; /* Zmenšení písma na menších obrazovkách */
             }
         }
+
+        #redirectButton {
+            position: absolute;
+            top: 90%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px 40px;
+            font-size: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #redirectButton:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
 
 <canvas id="canvas"></canvas>
 
-<div id="year">2025</div> <!-- Změněno na 2025 -->
+<div id="year">2025</div>
 <div id="happyNewYear">Šťastný nový rok!</div>
+
+<!-- Tlačítko pro přesměrování -->
+<button id="redirectButton">Přejít na odpočet</button>
 
 <script>
     window.addEventListener("resize", resizeCanvas, false);
@@ -164,7 +186,7 @@
         var nFire = 50;  // Počet paprsků (pro hvězdný efekt)
         var c = "rgb(" + (~~(Math.random() * 200 + 55)) + "," 
                        + (~~(Math.random() * 200 + 55)) + "," 
-                       + (~~(Math.random() * 200 + 55)) + ")";
+                       + (~~(Math.random() * 200 + 55)) + ")" ;
 
         // Generování paprsků pro hvězdný efekt
         for (var i = 0; i < nFire; i++) {
@@ -225,18 +247,10 @@
         }
     } 
 
-    // Funkce pro změnu roku s mega efektem
-    function changeYear() {
-        var yearElement = document.getElementById("year");
-        yearElement.classList.add("changeYear");
-        yearElement.innerText = "2025";
-
-        // Spustí ohňostroj po změně roku
-        setTimeout(createFirework, 500); 
-        setTimeout(createFirework, 1000); 
-        setTimeout(createFirework, 1500);
-        setTimeout(createFirework, 2000);
-    }
+    // Event listener pro tlačítko
+    document.getElementById("redirectButton").addEventListener("click", function() {
+        window.location.href = "odpocet.html";  // Přesměrování na stránku odpocet.html
+    });
 </script>
 
 </body>
