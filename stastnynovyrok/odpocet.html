@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odpočet do nového roku</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        #canvas {
+            display: block;
+        }
+
+        #countdown {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 80px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        #year {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            font-size: 200px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div id="year">2026</div>
+<div id="countdown"></div>
+
+<script>
+    const countdownElement = document.getElementById('countdown');
+    const yearElement = document.getElementById('year');
+    let fireworkActive = false;
+
+    function updateCountdown() {
+        const now = new Date();
+        const targetDate = new Date('2026-01-01T00:00:00'); // Updated target date to New Year 2026
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+            // Spustí ohňostroj
+            fireworkActive = true;
+            countdownElement.style.display = 'none';
+            yearElement.textContent = '2026';
+            createFirework();
+            setInterval(createFirework, 500);
+        } else {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    window.addEventListener("resize", resizeCanvas, false);
+    window.addEventListener("DOMContentLoaded", onLoad, false);
+
+    window.requestAnimationFrame = 
+        window.requestAnimationFrame || 
+        window.webkitRequestAnimationFrame || 
+        window.mozRequestAnimationFrame || 
+        window.oRequestAnimationFrame || 
+        window.msRequestAnimationFrame || 
+        function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+
+    let canvas, ctx, w, h, particles = [], probability = 0.04,
+        xPoint, yPoint;
+
+    function onLoad() {
+        canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
+        resizeCanvas();
+        window.requestAnimationFrame(updateWorld);
+    } 
+
+    function resizeCanvas() {
+        if (!!canvas) {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+    } 
+
+    function updateWorld() {
+        update();
+        paint();
+        window.requestAnimationFrame(updateWorld);
+    } 
+
+    function update() {
+        if (particles.length < 500 && Math.random() < probability && fireworkActive) {
+            createFirework();
+        }
+        const alive = [];
+        for (let i = 0; i < particles.length; i++) {
+            if (particles[i].move()) {
+                alive.push(particles[i]);
+            }
+        }
+        particles = alive;
+    } 
+
+    function paint() {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = "rgba(0,0,0,0.2)";
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].draw(ctx);
+        }
+    } 
+
+    function createFirework() {
+        xPoint = Math.random() * (w - 200) + 100;
+        yPoint = Math.random() * (h - 200) + 100;
+        const nFire = 50;  // Počet paprsků
+        const c = `rgb(${~~(Math.random() * 200 + 55)}, ${~~(Math.random() * 200 + 55)}, ${~~(Math.random() * 200 + 55)})`;
+
+        for (let i = 0; i < nFire; i++) {
+            const particle = new Particle();
+            particle.color = c;
+
+            const angle = (i * 360 / nFire);
+            const speed = Math.random() * 3 + 5;
+            particle.vx = speed * Math.cos(angle * Math.PI / 180);
+            particle.vy = speed * Math.sin(angle * Math.PI / 180);
+
+            particles.push(particle);
+        }
+    } 
+
+    function Particle() {
+        this.w = this.h = Math.random() * 4 + 1;
+        this.x = xPoint - this.w / 2;
+        this.y = yPoint - this.h / 2;
+        this.vx = (Math.random() - 0.5) * 10;
+        this.vy = (Math.random() - 0.5) * 10;
+        this.alpha = Math.random() * .5 + .5;
+        this.color;
+    } 
+
+    Particle.prototype = {
+        gravity: 0.05,
+        move: function () {
+            this.x += this.vx;
+            this.vy += this.gravity;
+            this.y += this.vy;
+            this.alpha -= 0.01;
+            if (this.x <= -this.w || this.x >= w ||
+                this.y >= h ||
+                this.alpha <= 0) {
+                    return false;
+            }
+            return true;
+        },
+        draw: function (c) {
+            c.save();
+            c.beginPath();
+
+            c.translate(this.x + this.w / 2, this.y + this.h / 2);
+            c.arc(0, 0, this.w, 0, Math.PI * 2);
+            c.fillStyle = this.color;
+            c.globalAlpha = this.alpha;
+
+            c.closePath();
+            c.fill();
+            c.restore();
+        }
+    } 
+</script>
+
+</body>
+</html>
