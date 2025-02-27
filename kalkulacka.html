@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulačka 3D tisku</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        label, input { display: block; width: 100%; margin-bottom: 10px; }
+        button { padding: 10px; width: 100%; background-color: #28a745; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        #result { font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Kalkulačka 3D tisku</h2>
+    
+    <label for="materialPrice">Cena materiálu (Kč/kg):</label>
+    <input type="number" id="materialPrice" value="500">
+    
+    <label for="modelWeight">Hmotnost modelu (g):</label>
+    <input type="number" id="modelWeight" value="100">
+    
+    <label for="electricityCost">Cena elektřiny (Kč/kWh):</label>
+    <input type="number" id="electricityCost" value="5">
+    
+    <label for="printerPower">Příkon tiskárny (W):</label>
+    <input type="number" id="printerPower" value="100">
+    
+    <label for="printTime">Doba tisku (h):</label>
+    <input type="number" id="printTime" value="5">
+    
+    <button onclick="calculatePrice()">Spočítat cenu</button>
+    
+    <p id="result"></p>
+</div>
+
+<script>
+    function calculatePrice() {
+        let materialPrice = parseFloat(document.getElementById("materialPrice").value);
+        let modelWeight = parseFloat(document.getElementById("modelWeight").value);
+        let electricityCost = parseFloat(document.getElementById("electricityCost").value);
+        let printerPower = parseFloat(document.getElementById("printerPower").value);
+        let printTime = parseFloat(document.getElementById("printTime").value);
+
+        let materialCost = (modelWeight / 1000) * materialPrice; 
+        let electricityCostTotal = (printerPower / 1000) * electricityCost * printTime;
+        let totalPrice = materialCost + electricityCostTotal;
+
+        document.getElementById("result").innerText = 
+            "Cena materiálu: " + materialCost.toFixed(2) + " Kč\n" +
+            "Cena elektřiny: " + electricityCostTotal.toFixed(2) + " Kč\n" +
+            "Celková cena: " + totalPrice.toFixed(2) + " Kč";
+    }
+</script>
+
+</body>
+</html>
