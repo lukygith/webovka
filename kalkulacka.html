@@ -5,40 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulačka 3D tisku</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
-        label, input { display: block; width: 100%; margin-bottom: 10px; }
-        button { padding: 10px; width: 100%; background-color: #28a745; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #218838; }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle, #000000, #434343);
+            background-attachment: fixed;
+            color: white;
+        }
+        .container, .login-container {
+            background-color: #1C1C1C;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+        }
+        .container { display: none; }
+        label, input, button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        input {
+            background-color: #2E2E2E;
+            color: white;
+            border: none;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+        }
         #result { font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="login-container" id="login-container">
+    <h2>Přihlášení</h2>
+    <label for="password">Zadejte heslo:</label>
+    <input type="password" id="password">
+    <button onclick="checkPassword()">Odeslat</button>
+</div>
+
+<div class="container" id="calculator-container">
     <h2>Kalkulačka 3D tisku</h2>
-    
-    <label for="materialPrice">Cena materiálu (Kč/kg):</label>
+
+    <label for="materialPrice">Cena materiálu za kilogram (Kč):</label>
     <input type="number" id="materialPrice" value="500">
-    
+
     <label for="modelWeight">Hmotnost modelu (g):</label>
     <input type="number" id="modelWeight" value="100">
-    
-    <label for="electricityCost">Cena elektřiny (Kč/kWh):</label>
+
+    <label for="electricityCost">Cena elektřiny za kWh (Kč):</label>
     <input type="number" id="electricityCost" value="5">
-    
+
     <label for="printerPower">Příkon tiskárny (W):</label>
     <input type="number" id="printerPower" value="100">
-    
-    <label for="printTime">Doba tisku (h):</label>
+
+    <label for="printTime">Doba tisku (hodiny):</label>
     <input type="number" id="printTime" value="5">
-    
+
     <button onclick="calculatePrice()">Spočítat cenu</button>
-    
+
     <p id="result"></p>
 </div>
 
 <script>
+    function hashPassword(password) {
+        return btoa(password);
+    }
+
+    const STORED_HASH = "a2Fsa3VsYWNrYQ==";
+
+    function checkPassword() {
+        let enteredPassword = document.getElementById("password").value;
+        if (hashPassword(enteredPassword) === STORED_HASH) {
+            document.getElementById("login-container").style.display = "none";
+            document.getElementById("calculator-container").style.display = "flex";
+        } else {
+            alert("Nesprávné heslo!");
+        }
+    }
+
     function calculatePrice() {
         let materialPrice = parseFloat(document.getElementById("materialPrice").value);
         let modelWeight = parseFloat(document.getElementById("modelWeight").value);
